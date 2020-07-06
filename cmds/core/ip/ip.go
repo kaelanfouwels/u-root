@@ -219,11 +219,14 @@ func linkadd() error {
 	}
 
 	cursor++
-	whatIWant = []string{"bridge"}
-	if arg[cursor] != "bridge" {
-		return usage()
+	whatIWant = []string{"bridge", "wireguard"}
+	if arg[cursor] == "bridge" {
+		return netlink.LinkAdd(&netlink.Bridge{LinkAttrs: attrs})
+	} else if arg[cursor] == "wireguard" {
+		return netlink.LinkAdd(&netlink.Wireguard{LinkAttrs: attrs})
 	}
-	return netlink.LinkAdd(&netlink.Bridge{LinkAttrs: attrs})
+	return usage()
+
 }
 
 func link() error {
